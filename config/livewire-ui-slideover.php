@@ -39,7 +39,7 @@ return [
     | 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl'
     */
     'component_defaults' => [
-        'slideover_max_width' => 'w-1/3',
+        'slideover_width' => 'w-1/3',
 
         'close_slideover_on_click_away' => true,
 

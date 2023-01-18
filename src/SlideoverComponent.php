@@ -67,25 +67,25 @@ abstract class SlideoverComponent extends Component implements Contract
         $this->closeSlideover();
     }
 
-    public static function slideoverMaxWidth(): string
+    public static function width(): string
     {
-        return config('livewire-ui-slideover.component_defaults.slideover_max_width', 'w-1/3');
+        return config('livewire-ui-slideover.component_defaults.slideover_width', 'w-1/3');
     }
 
-    public static function slideoverMaxWidthClass(): string
-    {
-        if (!array_key_exists(static::slideoverMaxWidth(), static::$maxWidths)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Slideover max width [%s] is invalid. The width must be one of the following [%s].',
-                    static::slideoverMaxWidth(),
-                    implode(', ', array_keys(static::$maxWidths))
-                ),
-            );
-        }
+    // public static function slideoverMaxWidthClass(): string
+    // {
+    //     if (!array_key_exists(static::slideoverMaxWidth(), static::$maxWidths)) {
+    //         throw new InvalidArgumentException(
+    //             sprintf(
+    //                 'Slideover max width [%s] is invalid. The width must be one of the following [%s].',
+    //                 static::slideoverMaxWidth(),
+    //                 implode(', ', array_keys(static::$maxWidths))
+    //             ),
+    //         );
+    //     }
 
-        return static::$maxWidths[static::slideoverMaxWidth()];
-    }
+    //     return static::$maxWidths[static::slideoverMaxWidth()];
+    // }
 
     public static function closeSlideoverOnClickAway(): bool
     {

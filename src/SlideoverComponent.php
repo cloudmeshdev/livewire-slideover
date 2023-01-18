@@ -102,14 +102,14 @@ abstract class SlideoverComponent extends Component implements Contract
         return config('livewire-ui-slideover.component_defaults.close_slideover_on_escape_is_forceful', true);
     }
 
-    public static function dispatchCloseEvent(): bool
+    public static function dispatchSlideoverCloseEvent(): bool
     {
-        return config('livewire-ui-slideover.component_defaults.dispatch_close_event', false);
+        return config('livewire-ui-slideover.component_defaults.dispatch_slideover_close_event', false);
     }
 
-    public static function destroyOnClose(): bool
+    public static function destroySlideoverOnClose(): bool
     {
-        return config('livewire-ui-slideover.component_defaults.destroy_on_close', false);
+        return config('livewire-ui-slideover.component_defaults.destroy_slideover_on_close', false);
     }
 
     private function emitSlideoverEvents(array $events): void

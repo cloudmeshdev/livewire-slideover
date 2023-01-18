@@ -16,13 +16,13 @@ window.LivewireUISlideover = () => {
             }
 
             // devo dispatchare eventi addizionali quando chiudo?
-            if (this.getComponentAttributeById(this.foregroundComponentId, 'dispatchCloseEvent') === true) {
+            if (this.getComponentAttributeById(this.foregroundComponentId, 'dispatchSlideoverCloseEvent') === true) {
                 const componentName = this.$wire.get('components')[this.foregroundComponentId].name;
                 Livewire.emit('slideoverClosed', componentName);
             }
 
             // devo anche distruggere il componente quando chiudo?
-            if (this.getComponentAttributeById(this.foregroundComponentId, 'destroyOnClose') === true) {
+            if (this.getComponentAttributeById(this.foregroundComponentId, 'destroySlideoverOnClose') === true) {
                 Livewire.emit('destroyComponent', this.foregroundComponentId);
             }
 
@@ -67,16 +67,16 @@ window.LivewireUISlideover = () => {
         },
 
         closeSlideoverOnEscape(trigger) {
-            if (this.getComponentAttributeById(this.foregroundComponentId, 'closeOnEscape') === false) {
+            if (this.getComponentAttributeById(this.foregroundComponentId, 'slideoverCloseOnEscape') === false) {
                 return;
             }
 
-            let force = this.getComponentAttributeById(this.foregroundComponentId, 'closeOnEscapeIsForceful') === true;
+            let force = this.getComponentAttributeById(this.foregroundComponentId, 'slideoverCloseOnEscapeIsForceful') === true;
             this.closeSlideover(force);
         },
 
         closeSlideoverOnClickAway(trigger) {
-            if (this.getComponentAttributeById(this.foregroundComponentId, 'closeOnClickAway') === false) {
+            if (this.getComponentAttributeById(this.foregroundComponentId, 'slideoverCloseOnClickAway') === false) {
                 return;
             }
 

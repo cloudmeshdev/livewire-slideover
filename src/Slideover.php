@@ -34,11 +34,11 @@ class Slideover extends Component
             'name'            => $component,
             'attributes'      => $componentAttributes,
             'slideoverAttributes' => array_merge([
-                'closeOnClickAway' => $componentClass::closeSlideoverOnClickAway(),
-                'closeOnEscape' => $componentClass::closeSlideoverOnEscape(),
-                'closeOnEscapeIsForceful' => $componentClass::closeSlideoverOnEscapeIsForceful(),
-                'dispatchCloseEvent' => $componentClass::dispatchCloseEvent(),
-                'destroyOnClose' => $componentClass::destroyOnClose(),
+                'slideoverCloseOnClickAway' => $componentClass::closeSlideoverOnClickAway(),
+                'slideoverCloseOnEscape' => $componentClass::closeSlideoverOnEscape(),
+                'slideoverCloseOnEscapeIsForceful' => $componentClass::closeSlideoverOnEscapeIsForceful(),
+                'dispatchSlideoverCloseEvent' => $componentClass::dispatchSlideoverCloseEvent(),
+                'destroySlideoverOnClose' => $componentClass::destroySlideoverOnClose(),
                 'width' => $componentClass::width(),
             ], $slideoverAttributes),
         ];

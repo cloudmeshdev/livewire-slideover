@@ -47,8 +47,8 @@ return [
 
         'close_slideover_on_escape_is_forceful' => true,
 
-        'dispatch_close_event' => false,
+        'dispatch_slideover_close_event' => false,
 
-        'destroy_on_close' => false,
+        'destroy_slideover_on_close' => false,
     ],
 ];

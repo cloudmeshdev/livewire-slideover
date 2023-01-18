@@ -23,7 +23,7 @@ window.LivewireUISlideover = () => {
 
             // devo anche distruggere il componente quando chiudo?
             if (this.getComponentAttributeById(this.foregroundComponentId, 'destroySlideoverOnClose') === true) {
-                Livewire.emit('destroyComponent', this.foregroundComponentId);
+                Livewire.emit('destroySlideover', this.foregroundComponentId);
             }
 
             // togli l'id del componente appena chiuso

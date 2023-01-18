@@ -48,7 +48,7 @@ class Slideover extends Component
         $this->emit('activeSlideoverComponentChanged', $id);
     }
 
-    public function destroyComponent($id): void
+    public function destroySlideover($id): void
     {
         unset($this->components[$id]);
     }
@@ -57,7 +57,7 @@ class Slideover extends Component
     {
         return [
             'openSlideover',
-            'destroyComponent'
+            'destroySlideover'
         ];
     }
 

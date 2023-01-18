@@ -1,13 +1,13 @@
 <?php
 
-namespace LivewireUI\Modal;
+namespace LivewireUI\Slideover;
 
 use Exception;
 use Illuminate\View\View;
 use Livewire\Component;
 use ReflectionClass;
 
-class Modal extends Component
+class Slideover extends Component
 {
     public ?string $activeComponent;
 
@@ -19,9 +19,9 @@ class Modal extends Component
         $this->activeComponent = null;
     }
 
-    public function openModal($component, $componentAttributes = [], $modalAttributes = []): void
+    public function openSlideover($component, $componentAttributes = [], $slideoverAttributes = []): void
     {
-        $requiredInterface = \LivewireUI\Modal\Contracts\ModalComponent::class;
+        $requiredInterface = \LivewireUI\Slideover\Contracts\SlideoverComponent::class;
         $componentClass = app('livewire')->getClass($component);
         $reflect = new ReflectionClass($componentClass);
 
@@ -33,20 +33,19 @@ class Modal extends Component
         $this->components[$id] = [
             'name'            => $component,
             'attributes'      => $componentAttributes,
-            'modalAttributes' => array_merge([
-                'closeOnClickAway' => $componentClass::closeModalOnClickAway(),
-                'closeOnEscape' => $componentClass::closeModalOnEscape(),
-                'closeOnEscapeIsForceful' => $componentClass::closeModalOnEscapeIsForceful(),
+            'slideoverAttributes' => array_merge([
+                'closeOnClickAway' => $componentClass::closeSlideoverOnClickAway(),
+                'closeOnEscape' => $componentClass::closeSlideoverOnEscape(),
+                'closeOnEscapeIsForceful' => $componentClass::closeSlideoverOnEscapeIsForceful(),
                 'dispatchCloseEvent' => $componentClass::dispatchCloseEvent(),
                 'destroyOnClose' => $componentClass::destroyOnClose(),
-                'maxWidth' => $componentClass::modalMaxWidth(),
-                'maxWidthClass' => $componentClass::modalMaxWidthClass(),
-            ], $modalAttributes),
+                'width' => $componentClass::width(),
+            ], $slideoverAttributes),
         ];
 
         $this->activeComponent = $id;
 
-        $this->emit('activeModalComponentChanged', $id);
+        $this->emit('activeSlideoverComponentChanged', $id);
     }
 
     public function destroyComponent($id): void
@@ -57,22 +56,22 @@ class Modal extends Component
     public function getListeners(): array
     {
         return [
-            'openModal',
+            'openSlideover',
             'destroyComponent'
         ];
     }
 
     public function render(): View
     {
-        if (config('livewire-ui-modal.include_js', true)) {
-            $jsPath = __DIR__.'/../public/modal.js';
+        if (config('livewire-ui-slideover.include_js', true)) {
+            $jsPath = __DIR__ . '/../public/slideover.js';
         }
 
-        if (config('livewire-ui-modal.include_css', false)) {
-            $cssPath = __DIR__ . '/../public/modal.css';
+        if (config('livewire-ui-slideover.include_css', false)) {
+            $cssPath = __DIR__ . '/../public/slideover.css';
         }
 
-        return view('livewire-ui-modal::modal', [
+        return view('livewire-ui-slideover::slideover', [
             'jsPath' => $jsPath ?? null,
             'cssPath' => $cssPath ?? null,
         ]);

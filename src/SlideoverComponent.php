@@ -69,7 +69,7 @@ abstract class SlideoverComponent extends Component implements Contract
 
     public static function slideoverMaxWidth(): string
     {
-        return config('livewire-ui-slideover.component_defaults.slideover_max_width', '2xl');
+        return config('livewire-ui-slideover.component_defaults.slideover_max_width', 'w-1/3');
     }
 
     public static function slideoverMaxWidthClass(): string

@@ -1,12 +1,4 @@
 <div>
-    @php
-        $map = [];
-    
-        foreach ($components as $id => $component) {
-            $map[] = $id;
-        }
-    @endphp
-
     @isset($jsPath)
         <script>{!! file_get_contents($jsPath) !!}</script>
     @endisset
@@ -17,24 +9,21 @@
     <div
         x-data="LivewireUISlideover()"
         x-init="init()"
-        {{-- x-on:close.stop="setShowPropertyTo(false)" --}}
-        x-on:keydown.escape.window="closeSlideoverOnEscape()"
-        x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
-        x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
-        x-show="activeComponents.length > 0"
+        x-show="isEnabled"
         class="fixed inset-0 z-10 overflow-y-auto"
         style="display: none;"
     >
 
-        @for ($i = 0; $i < 2; $i++)
+        @for ($i = 0; $i < count($components) + 1; $i++)
             <!-- Slideover template -->
             <div 
-                x-show="show && activeComponents.length > {{ $i }}" 
-                class="fixed inset-0 overflow-hidden z-10"
+                x-show="isEnabled && visibleComponents.length > {{ $i }}" 
+                class="slideover-ui-container fixed inset-0 overflow-hidden z-10"
             >
                 <div 
-                    class="absolute inset-0 bg-gray-500 bg-opacity-75 z-10"
-                    x-show="show && activeComponents.length > {{ $i }}" 
+                    x-show="isEnabled && visibleComponents.length > {{ $i }}" 
+                    class="slideover-ui-background-overlay absolute inset-0 bg-gray-500 bg-opacity-75 z-10"
+
                     x-transition:enter="ease-in-out duration-500" 
                     x-transition:enter-start="opacity-0" 
                     x-transition:enter-end="opacity-100" 
@@ -42,35 +31,38 @@
                     x-transition:leave-start="opacity-100" 
                     x-transition:leave-end="opacity-0"
                     aria-hidden="true" 
-                    x-description="Background overlay, show/hide based on slide-over state." 
+                    
+                    x-description="Background overlay" 
                 ></div>
                 
                 <div 
-                    x-show="show && activeComponents.length > {{ $i }}" 
-                    class="absolute inset-y-0 right-0 bg-white z-10"
+                    x-show="isEnabled && visibleComponents.length > {{ $i }}" 
+                    class="slideover-ui-panel absolute inset-y-0 right-0 bg-white z-10"
                     x-bind:class="getComponentAttributeById(getComponentIdByIndex({{ $i }}), 'width')"
-                    x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700" 
+                    
+                    x-transition:enter="transform transition ease-in-out duration-500" 
                     x-transition:enter-start="translate-x-full" 
                     x-transition:enter-end="translate-x-0"
-                    x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700" 
+                    x-transition:leave="transform transition ease-in-out duration-500" 
                     x-transition:leave-start="translate-x-0" 
                     x-transition:leave-end="translate-x-full"
-                    x-description=" Slide-over panel, show/hide based on slide-over state." 
-                >
-                    <button class="bg-red-100 rounded p-2" x-on:click="Livewire.emit('closeSlideover')">x</button>
 
+                    x-description=" Slideover panel" 
+                >
                     @if (count($components) > $i)
                         @php
                             $componentId = collect($components)->slice($i, 1)->keys()->first();
                             $component = $components[$componentId];
+                            $key = $componentId;
                         @endphp
                         
-                        @livewire($component['name'], $component['attributes'], key($id))
+                        <div x-ref="{{ $key }}" wire:key="{{ $key }}">
+                            @livewire($component['name'], $component['attributes'], key($key))
+                        </div>
                     @endif
                 </div>
             </div>
             <!-- Slideover template -->
-
         @endfor
     
     </div>

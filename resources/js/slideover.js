@@ -1,48 +1,68 @@
 window.LivewireUISlideover = () => {
     return {
-        show: false,
+        isEnabled: false,
         activeComponents: [],
+        visibleComponents: [],
         foregroundComponentId: null,
+        closingComponentId: null,
+        transitionDuration: 500,
         
         closeSlideover(force = false, skipPreviousSlideovers = 0, destroySkipped = false) {
-            console.log('closeSlideover');
+            // console.log('closeSlideover');
 
-            if (this.show === false) {
-                return;
-            }
+            if (!this.isEnabled) { return; }
+            if (!this.foregroundComponentId) { return; }
 
-            if (!this.foregroundComponentId) {
-                return;
-            }
+            this.closingComponentId = this.visibleComponents.pop();
 
-            // devo dispatchare eventi addizionali quando chiudo?
             if (this.getComponentAttributeById(this.foregroundComponentId, 'dispatchSlideoverCloseEvent') === true) {
                 const componentName = this.$wire.get('components')[this.foregroundComponentId].name;
                 Livewire.emit('slideoverClosed', componentName);
             }
 
-            // devo anche distruggere il componente quando chiudo?
-            if (this.getComponentAttributeById(this.foregroundComponentId, 'destroySlideoverOnClose') === true) {
-                Livewire.emit('destroySlideover', this.foregroundComponentId);
+            if (this.getComponentAttributeById(this.closingComponentId, 'destroySlideoverOnClose') === true) {
+                setTimeout(() => {
+                    Livewire.emit('destroySlideover', this.closingComponentId);
+                }, this.transitionDuration);
             }
 
-            // togli l'id del componente appena chiuso
-            this.activeComponents.pop();
             this.foregroundComponentId = null;
 
-            // pesca l'id del componente precedente (se presente)
-            let latestActiveComponentId = this.activeComponents[this.activeComponents.length - 1];
+            let previousVisibleComponentId = this.visibleComponents[this.visibleComponents.length - 1];
+            previousVisibleComponentId 
+                ? this.openComponent(previousVisibleComponentId)
+                : this.closeAll();
+            
+            this.trashClosingActiveComponent();
+        },
 
-            if (latestActiveComponentId) {
-                setTimeout(() => {
-                    this.foregroundComponentId = latestActiveComponentId;
-                    this.setForegroundComponent(latestActiveComponentId);
-                }, 300);
-            } else {
-                this.foregroundComponentId = null;                
+        trashClosingActiveComponent() {
+            // The closing one which is the last in the array
+            setTimeout(() => {
+                this.activeComponents.pop();
+            }, this.transitionDuration);
+        },
+        
+        trashActiveComponent(trashingId) {
+            setTimeout(() => {
+                this.activeComponents = this.activeComponents.filter((id) => id != trashingId);
+            }, this.transitionDuration);
+        },
+        
+        openComponent(componentId) {
+            setTimeout(() => {
+                this.foregroundComponentId = componentId;
+            }, 300);
+        },
+
+        closeAll() {
+            setTimeout(() => {
+                this.foregroundComponentId = null;     
+                this.closingComponentId = null;           
                 this.$wire.resetState();
-                this.setShowPropertyTo(false);
-            }
+            }, this.transitionDuration);
+
+            this.disable();
         },
 
         getComponentIdByIndex(index) {
@@ -50,20 +70,21 @@ window.LivewireUISlideover = () => {
         },
         
         getComponentAttributeById(id, key) {
-
             if (this.$wire.get('components')[id] !== undefined) {
                 return this.$wire.get('components')[id]['slideoverAttributes'][key];
             }
         },
         
-        setShowPropertyTo(show) {
-            this.show = show;
+        enable() {
+            this.isEnabled = true;
 
-            if (show) {
-                document.body.classList.add('overflow-y-hidden');
-            } else {
-                document.body.classList.remove('overflow-y-hidden');
-            }
+            document.getElementsByTagName('html')[0].classList.add('overflow-y-hidden');
+        },
+
+        disable() {
+            this.isEnabled = false;
+            
+            document.getElementsByTagName('html')[0].classList.remove('overflow-y-hidden');
         },
 
         closeSlideoverOnEscape(trigger) {
@@ -83,32 +104,31 @@ window.LivewireUISlideover = () => {
             this.closeSlideover(true);
         },
 
-        setForegroundComponent(id, skip = false) {
-            console.log('setForegroundComponent', id);
+        addActiveComponent(id, skip = false) {
+            // console.log('addActiveComponent', id);
             
-            // this.setShowPropertyTo(true);
-            this.show = true;
-
-            // evita di mostrare 2 volte lo stesso componente
-            if (this.activeComponents.includes(id)) {
-                return;
+            if (!this.isEnabled) {
+                this.enable();
             }
 
+            if (this.visibleComponents.includes(id)) { return; }
+
+            this.visibleComponents.push(id);
             this.activeComponents.push(id);
             this.foregroundComponentId = id;
         },
 
-
         init() {
-            // resta in ascolto del 'closeSlideover'
             Livewire.on('closeSlideover', 
                 (force = false, skipPreviousSlideovers = 0, destroySkipped = false) => {
+                    // console.log('init@closeSlideover');
                     this.closeSlideover(force, skipPreviousSlideovers, destroySkipped);
                 }
             );
 
             Livewire.on('activeSlideoverComponentChanged', (id) => {
-                this.setForegroundComponent(id);
+                // console.log('init@activeSlideoverComponentChanged');
+                this.addActiveComponent(id);
             });
         },
 

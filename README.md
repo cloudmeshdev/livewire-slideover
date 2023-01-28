@@ -220,7 +220,7 @@ This approach is usefull when the slideover is opened on top of another slideove
 
 ## Difference with wire-elements/modal
 
-At the moment some feature of the `wire-element/modal` package are disabled:
+At the moment some feature of the `wire-elements/modal` package are disabled:
 - closing slideover with `escape` key
 - closing slideover by clicking outside of it (close on click away)
 - dispatching events on slideover closing

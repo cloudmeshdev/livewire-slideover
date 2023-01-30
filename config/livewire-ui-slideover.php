@@ -49,6 +49,6 @@ return [
 
         'dispatch_slideover_close_event' => false,
 
-        'destroy_slideover_on_close' => false,
+        'destroy_slideover_on_close' => true, // needed otherwise wired behavior
     ],
 ];

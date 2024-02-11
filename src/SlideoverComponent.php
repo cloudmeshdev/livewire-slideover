@@ -63,7 +63,7 @@ abstract class SlideoverComponent extends Component implements Contract
 
     public function closeSlideoverWithEvents(array $events): void
     {
-        $this->emitSlideoverEvents($events);
+        $this->dispatchSlideoverEvents($events);
         $this->closeSlideover();
     }
 
@@ -109,7 +109,7 @@ abstract class SlideoverComponent extends Component implements Contract
         return config('wire-elements-slideover.component_defaults.destroy_on_close', false);
     }
 
-    private function emitSlideoverEvents(array $events): void
+    private function dispatchSlideoverEvents(array $events): void
     {
         foreach ($events as $component => $event) {
             if (is_array($event)) {

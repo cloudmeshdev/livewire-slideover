@@ -10,6 +10,7 @@
         x-data="LivewireUISlideover()"
         x-init="init()"
         x-show="isEnabled"
+        x-on:keydown.escape.window="closeSlideoverOnEscape()"
         class="fixed inset-0 z-10 overflow-y-auto"
         style="display: none;"
     >
@@ -22,8 +23,8 @@
             >
                 <div 
                     x-show="isEnabled && visibleComponents.length > {{ $i }}" 
-                    class="slideover-ui-background-overlay absolute inset-0 bg-gray-500 bg-opacity-75 z-10"
-
+                    class="slideover-ui-background-overlay absolute inset-0 bg-black bg-opacity-25 z-10"
+                    x-on:click="closeSlideoverOnClickAway()"
                     x-transition:enter="ease-in-out duration-500" 
                     x-transition:enter-start="opacity-0" 
                     x-transition:enter-end="opacity-100" 

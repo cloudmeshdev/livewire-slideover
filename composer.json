@@ -1,5 +1,5 @@
 {
-  "name": "aristridely/slideover",
+  "name": "cloudmeshdev/livewire-slideover",
   "description": "Laravel Livewire slideover component",
   "keywords": [
     "laravel",
@@ -9,8 +9,8 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Aristotele Tufano",
-      "email": "aristotele.tufano@evolutiongroup.digital"
+      "name": "cloudmesh.dev",
+      "email": "hello@cloudmesh.dev"
     }
   ],
   "require-dev": {

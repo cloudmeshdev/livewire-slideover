@@ -1,11 +1,11 @@
 ## What is?
 A package that allow overlapping (virtually) infinite slideovers simultaneously with configurable widths. </br>
-This package is based upon wire-elements/modal (thanks [Philo Hermans](https://github.com/philoNL)).
+This package is based upon aristridely/slideover (thanks [Aristotele Tufano] (https://github.com/ariStridely)) which is a fork of wire-elements/modal (thanks [Philo Hermans](https://github.com/philoNL)).
 
 ## Installation
 To get started, require the package via Composer:
 ```
-composer require aristridely/slideover
+composer require cloudmeshdev/livewire-slideover
 ```
 
 ## Livewire directive

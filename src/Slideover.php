@@ -51,6 +51,7 @@ class Slideover extends Component
                 'closeOnEscapeIsForceful' => $componentClass::closeSlideoverOnEscapeIsForceful(),
                 'dispatchCloseEvent' => $componentClass::dispatchCloseEvent(),
                 'destroyOnClose' => $componentClass::destroyOnClose(),
+                'width' => $componentClass::slideoverWidth(),
                 'maxWidth' => $componentClass::slideoverMaxWidth(),
                 'maxWidthClass' => $componentClass::slideoverMaxWidthClass(),
             ], $slideoverAttributes),

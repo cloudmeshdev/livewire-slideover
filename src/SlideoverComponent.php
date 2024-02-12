@@ -67,6 +67,11 @@ abstract class SlideoverComponent extends Component implements Contract
         $this->closeSlideover();
     }
 
+    public static function slideoverWidth(): string
+    {
+        return config('wire-elements-slideover.component_defaults.slideover_width', 'w-1/3');
+    }
+
     public static function slideoverMaxWidth(): string
     {
         return config('wire-elements-slideover.component_defaults.slideover_max_width', '2xl');

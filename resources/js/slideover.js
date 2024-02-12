@@ -105,7 +105,6 @@ window.LivewireUISlideover = () => {
         },
 
         addActiveComponent(id, skip = false) {
-            // console.log('addActiveComponent', id);
             
             if (!this.isEnabled) {
                 this.enable();
@@ -121,13 +120,11 @@ window.LivewireUISlideover = () => {
         init() {
             Livewire.on('closeSlideover', 
                 (force = false, skipPreviousSlideovers = 0, destroySkipped = false) => {
-                    // console.log('init@closeSlideover');
                     this.closeSlideover(force, skipPreviousSlideovers, destroySkipped);
                 }
             );
 
             Livewire.on('activeSlideoverComponentChanged', (id) => {
-                // console.log('init@activeSlideoverComponentChanged');
                 this.addActiveComponent(id);
             });
         },

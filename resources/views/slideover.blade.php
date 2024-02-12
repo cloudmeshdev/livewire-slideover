@@ -38,7 +38,7 @@
                 
                 <div 
                     x-show="isEnabled && visibleComponents.length > {{ $i }}" 
-                    class="slideover-ui-panel absolute inset-y-0 right-0 bg-white z-10"
+                    class="slideover-ui-panel absolute inset-y-0 right-0 bg-gray-100 dark:bg-slate-700 z-10"
                     x-bind:class="getComponentAttributeById(getComponentIdByIndex({{ $i }}), 'width')"
                     
                     x-transition:enter="transform transition ease-in-out duration-500" 

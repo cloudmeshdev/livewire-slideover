@@ -21,12 +21,7 @@ Add the Livewire directive `@livewire('livewire-ui-slideover')` to your template
 ```
 
 ## Alpine
-Requires [Alpine](https://github.com/alpinejs/alpine). You can use the official CDN to quickly include Alpine:
-
-```html
-<!-- Alpine v3 -->
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-```
+[Alpine](https://github.com/alpinejs/alpine) is already combined with Livewire v3
 
 ## TailwindCSS
 The base slideover template is made with TailwindCSS. If you use a different CSS framework I recommend that you publish the slideover template and change the markup to include the required classes for your CSS framework.
@@ -54,17 +49,17 @@ class EditUserSlideover extends SlideoverComponent
 ```
 
 ## Opening a slideover
-To open a slideover you will need to emit an event. To open the `EditUserSlideover` slideover for example:
+To open a slideover you will need to dispatch an event. To open the `EditUserSlideover` slideover for example:
 
 ```html
 <!-- Outside of any Livewire component -->
-<button onclick="Livewire.emit('openSlideover', 'edit-user-slideover')">Edit User</button>
+<button onclick="Livewire.dispatch('openSlideover', {component: 'edit-user-slideover'})">Edit User</button>
 
 <!-- Inside existing Livewire component -->
-<button wire:click="$emit('openSlideover', 'edit-user-slideover')">Edit User</button>
+<button wire:click="$dispatch('openSlideover', {component: 'edit-user-slideover'})">Edit User</button>
 
 <!-- Taking namespace into account for component Admin/EditUser -->
-<button wire:click="$emit('openSlideover', 'admin.edit-user-slideover')">Edit User</button>
+<button wire:click="$dispatch('openSlideover', {component: 'admin.edit-user-slideover'})">Edit User</button>
 ```
 
 ## Passing parameters
@@ -72,31 +67,47 @@ To open the `EditUserSlideover` slideover for a specific user we can pass the us
 
 ```html
 <!-- Outside of any Livewire component -->
-<button onclick='Livewire.emit(
-    "openSlideover", 
-    "edit-user-slideover", 
-    {{ json_encode(["user" => $user->id]) }})'
+<button onclick="Livewire.dispatch(
+    'openSlideover', { 
+        component: 'edit-user-slideover', 
+        arguments: { 
+            user: {{ $user->id }}
+        },
+        slideoverAttributes: {
+            closeOnClickAway: false
+        }
+    })"
 >Edit User</button>
 
 <!-- Inside existing Livewire component -->
-<button wire:click='$emit(
-    "openSlideover", 
-    "edit-user-slideover", 
-    {{ json_encode(["user" => $user->id]) }})'
+<button wire:click="$dispatch(
+    'openSlideover', { 
+        component: 'edit-user-slideover', 
+        arguments: { 
+            user: {{ $user->id }}
+        }
+    })"
 >Edit User</button>
 
 <!-- If you use a different primaryKey (e.g. email), adjust accordingly -->
-<button wire:click='$emit(
-    "openSlideover", 
-    "edit-user-slideover", 
-    {{ json_encode(["user" => $user->email]) }})'
+<button wire:click="$dispatch(
+    'openSlideover', { 
+        component: 'edit-user-slideover', 
+        arguments: { 
+            user: {{ $user->email }}
+        }
+    })"
 >Edit User</button>
 
 <!-- Example of passing multiple parameters -->
-<button wire:click='$emit(
-    "openSlideover", 
-    "edit-user-slideover", 
-    {{ json_encode([$user->id, $isAdmin]) }})'
+<button wire:click="$dispatch(
+    'openSlideover', { 
+        component: 'edit-user-slideover', 
+        arguments: { 
+            user: {{ $user->email }},
+            isAdmin: {{ $isAdmin }}
+        }
+    })"
 >Edit User</button>
 ```
 
@@ -136,19 +147,22 @@ From an existing slideover you can use the exact same event and another slideove
 
 <!-- Edit Form -->
 
-<button wire:click='$emit(
-    "openSlideover", 
-    "delete-user-slideover", 
-    {{ json_encode(["user" => $user->id]) }})'
+<button wire:click="$dispatch(
+    'openSlideover', { 
+        component: 'delete-user-slideover', 
+        arguments: { 
+            user: {{ $user->id }}
+        }
+    })"
 >Delete User</button>
 ```
 
 ## Closing a slideover
-When you are done with the current slideover, you can close it by emitting the `closeSlideover` event. 
+When you are done with the current slideover, you can close it by dispatching the `closeSlideover` event. 
 This will always close the most recent (in the foreground) slideover. </br>
 (N.B. at the moment, each time you close a slideover, the relative component's state will be destroyed).
 ```html
-<button wire:click="$emit('closeSlideover')">Close</button>
+<button wire:click="$dispatch('closeSlideover')">Close</button>
 ```
 
 You can also close a slideover from within your slideover component class:
@@ -210,21 +224,18 @@ This approach is usefull when the slideover is opened on top of another slideove
     $slideoverAttributes = json_encode(['width' => 'w-8/12']);
 @endphp
 
-<button wire:click="$emit(
-    'openSlideover', 
-    'delete-user-slideover', 
-    {{ $slideoverData }}
-    {{ $slideoverAttributes }}"
+<button wire:click="$dispatch(
+    'openSlideover', { 
+        component: 'delete-user-slideover', 
+        arguments: {{ $slideoverData }},
+        slideoverAttributes: {{ $slideoverAttributes }}
+    })"
 >Delete User</button>
 ```
 
-## Difference with wire-elements/modal
-
-At the moment some feature of the `wire-elements/modal` package are disabled:
-- closing slideover with `escape` key
-- closing slideover by clicking outside of it (close on click away)
-- dispatching events on slideover closing
-- skipping previously opened slideover
+## Difference with aristridely/slideover
+- re-enabled closing slideover with `escape` key
+- re-enabled closing slideover by clicking outside of it (close on click away)
 
 ## Combine with wire-elements/modal
 This package can be used together with `wire-elements/modal`. The recommended way is to declare it before the modal package, as follow:
@@ -240,9 +251,10 @@ This package can be used together with `wire-elements/modal`. The recommended wa
 </html>
 ```
 This will ensure that the modal element will always be on top of the slideover one.
-Because of this joined usage the aformentioned capabilities of a slideover of closing on escape and on clickaway are disabled at the moment (they would have collide with the modal behavior). </br>
+
+Warning: 
+Closing on escape and on clickaway will collide with the modal behavior. </br>
 E.g. If a modal is opened on top of a slideover, by pressing `escape` both will be closed. </br>
-A future solution will be investigated.
 
 ## Configuration
 You can (partially) customize the Slideover via the `livewire-ui-slideover.php` config file. </br>
@@ -252,6 +264,3 @@ You can (partially) customize the Slideover via the `livewire-ui-slideover.php` 
 ```shell
 php artisan vendor:publish --tag=livewire-ui-slideover-config
 ```
-
-- [ ] complete example
-- [ ] demo gif

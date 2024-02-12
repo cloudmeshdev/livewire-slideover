@@ -78,13 +78,13 @@ window.LivewireUISlideover = () => {
         enable() {
             this.isEnabled = true;
 
-            document.getElementsByTagName('html')[0].classList.add('overflow-y-hidden');
+            document.body.classList.add('overflow-hidden', 'max-h-dvh');
         },
 
         disable() {
             this.isEnabled = false;
             
-            document.getElementsByTagName('html')[0].classList.remove('overflow-y-hidden');
+            document.body.classList.remove('overflow-hidden', 'max-h-dvh');
         },
 
         closeSlideoverOnEscape(trigger) {
